@@ -2,6 +2,9 @@ using JHP.Api;
 using JHP.Controls;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
+using NAudio.Wave;
+using System.Speech.Synthesis;
+using Prompt = JHP.Api.Prompt;
 
 namespace JHP
 {
@@ -17,26 +20,94 @@ namespace JHP
 
             this.BackColor = formBgColor;
             this.TransparencyKey = formBgColor;
-
             InitControls();
             InitWV();
+            timer = new System.Windows.Forms.Timer()
+            {
+                Interval = 1000,
+                Enabled = false,
+            };
+            timer.Tick += Timer_Tick;
         }
 
-        
+        private long[] nextTick = new long[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        private long[] tick = new long[8] { 7200000, 36000000, 1800000, 1200000, 900000, 600000, 100000, 55000 };
+        private string[] msg =
+        {
+            "재획비",
+            "60분",
+            "30분",
+            "20분",
+            "15분",
+            "10분",
+            "회수",
+            "파운틴",
+        };
+        SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+
+        private WaveOutEvent outputDevice = new WaveOutEvent();
+        private AudioFileReader? audioFile;
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            var now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+            bool ring = false;
+            var chk = Config.Instance.alarmEnabled;
+            List<string> msgs = new List<string>();
+            for (int i = 0; i < 8; i++)
+            {
+                if (chk[i] == true && now >= nextTick[i])
+                {
+                    ring = true;
+                    nextTick[i] = now + tick[i];
+                    msgs.Add(msg[i]);
+                }
+            }
+
+
+            if (ring == true)
+            {
+                if (Config.Instance.tts == true)
+                {
+                    Task.Run(() =>
+                    {
+                        
+                        speechSynthesizer.SetOutputToDefaultAudioDevice();
+                        speechSynthesizer.SelectVoice("Microsoft Heami Desktop"); // 한국어 지원은 Heami 만 가능, 없어도 됨, 있으면 오류 나는경우가 있는거 같음
+                        speechSynthesizer.Speak(msgs[0]);
+                    });
+                } else
+                {
+                    outputDevice.Volume = Config.Instance.volume / 100.0f;
+                    if (audioFile == null)
+                    {
+                        audioFile = new AudioFileReader(Path.Combine("alarm", Config.Instance.alarmName));
+                        outputDevice.Stop();
+                        outputDevice.Init(audioFile);
+                    }
+                    audioFile.Position = 0;
+                    outputDevice.Play();
+                }
+            }
+
+        }
+
         NSlider slider;
         WebView2 wv;
         ControlButton closeBtn;
+        ControlButton alarmBtn;
         ControlButton maximizeBtn;
         ControlButton minimizeBtn;
         ControlButton gotoBtn;
         ContextMenuStrip menuStrip;
+        System.Windows.Forms.Timer timer;
         private const int btnSize = 30;
         private const uint thumbColor = 0xFF707070;
-
+        AlarmForm alarmForm = new AlarmForm();
         async void InitWV()
         {
             string _cacheFolderPath = System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, "\\cache");
             var webView2Environment = await CoreWebView2Environment.CreateAsync(null, _cacheFolderPath);
+            
             await wv.EnsureCoreWebView2Async(webView2Environment);
             wv.CoreWebView2.Navigate("https://netflix.com");
         }
@@ -63,9 +134,29 @@ namespace JHP
             
             gotoBtn.Click += GotoBtn_Click;
             UpdateMenu();
-            slider = new NSlider()
+            alarmBtn = new ControlButton()
             {
                 Location = new Point(thickness + btnSize, 1),
+                Size = new Size(btnSize, btnSize),
+                Font = new Font("Segoe MDL2 Assets", 9),
+                Text = "\uE823",
+                FlatAppearance =
+                {
+                    BorderSize = 0,
+                },
+                FlatStyle = FlatStyle.Flat,
+                ForeColor = Color.Black,
+                BackColor = Color.White,
+                TabStop = false,
+                Anchor = AnchorStyles.Left | AnchorStyles.Top
+
+            };
+
+            alarmBtn.MouseUp += AlarmBtn_Click;
+
+            slider = new NSlider()
+            {
+                Location = new Point(thickness + btnSize *2, 1),
                 Size= new Size(120, 28),
                 ThumbSize = new Size(12,16),
                 Minimum = 30,
@@ -131,16 +222,53 @@ namespace JHP
                 BackColor = Color.White,
                 TabStop = false
             };
-
             closeBtn.Click += CloseBtn_Click;
             maximizeBtn.Click += MaximizeBtn_Click;
             minimizeBtn.Click += MinimizeBtn_Click;
             Controls.Add(gotoBtn);
+            Controls.Add(alarmBtn);
             Controls.Add(closeBtn);
             Controls.Add(maximizeBtn);
             Controls.Add(minimizeBtn);
             Controls.Add(slider);
             Controls.Add(wv);
+        }
+        bool isStart = false;
+        private void AlarmBtn_Click(object? sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            var newState = !isStart;
+            switch (me.Button)
+            {
+                case MouseButtons.Left:
+                    if (newState == true)
+                    {
+                        var now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+                        for (int i = 0; i < tick.Length; i++)
+                        {
+                            nextTick[i] = now + tick[i];
+                        }
+                    }
+                    alarmBtn.BackColor = newState ? Color.LimeGreen : Color.White;
+                    timer.Enabled = newState;
+                    isStart = newState;
+                    break;
+                case MouseButtons.Right:
+                    if (alarmForm.Visible == false)
+                    {
+                        alarmForm.Show();
+                    }
+                    else
+                    {
+                        alarmForm.Hide();
+                    }
+                        
+                    break;
+                default:
+                    break;
+
+            }
+            
         }
 
         private void UpdateMenu()
@@ -240,7 +368,7 @@ namespace JHP
             
             Opacity = e.NewValue / 100.0;
         }
-
+        private bool isAlarmShowing = false;
         private static int thickness = 10;
         private const int captionSize = 31;
         private readonly ReSize resize = new ReSize(thickness);
@@ -262,9 +390,11 @@ namespace JHP
             }
             
             if (slider != null)
-                slider.Location = new Point(thickness + btnSize, 1);
+                slider.Location = new Point(thickness + btnSize * 2, 1);
             if (gotoBtn != null)
                 gotoBtn.Location = new Point(thickness, 1);
+            if (alarmBtn != null)
+                alarmBtn.Location = new Point(thickness + btnSize, 1);
             if (closeBtn != null)
                 closeBtn.Location = new Point(this.ClientSize.Width - thickness - btnSize, 1);
             if (maximizeBtn != null)
@@ -285,7 +415,9 @@ namespace JHP
 
         protected override void OnMove(EventArgs e)
         {
-            base.OnMove(e);
+            alarmForm.Location = new Point(Location.X + Width, Location.Y);
+
+           base.OnMove(e);
         }
 
 
@@ -362,6 +494,10 @@ namespace JHP
             Config.Instance.width = this.ClientSize.Width;
             Config.Instance.height = this.ClientSize.Height;
             Config.Instance.Save();
+        }
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
         }
     }
 }

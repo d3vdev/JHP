@@ -23,10 +23,14 @@ namespace JHP.Api
             };
             sites = new List<Site>();
             topMost = false;
+            alarmEnabled = new bool[] { false, false, false, false, false, false, false, false };
+            alarmName = "";
+            volume = 70;
+            tts = false;
         }
 
         [JsonConstructor]
-        public Config(int width, int height, int x, int y, int opacity, bool topMost, List<Site> sites = null)
+        public Config(int width, int height, int x, int y, int opacity, bool topMost, bool[] alarmEnabled, string alarmName, int volume, bool tts, List<Site> sites = null)
         {
             this.width = width;
             this.height = height;
@@ -35,6 +39,10 @@ namespace JHP.Api
             this.opacity = opacity;
             this.sites = sites;
             this.topMost = topMost;
+            this.alarmEnabled = alarmEnabled;
+            this.alarmName = alarmName;
+            this.volume = volume;
+            this.tts =tts;
         }
 
         private static readonly Lazy<Config> instance = new Lazy<Config>(() => new Config());
@@ -54,12 +62,22 @@ namespace JHP.Api
         [JsonInclude]
         public int opacity;
 
+        [JsonInclude]
+        public int volume;
+
         public List<Site> defaultSite;
         [JsonInclude]
         public List<Site> sites;
 
         [JsonInclude]
         public bool topMost;
+
+        [JsonInclude]
+        public bool[] alarmEnabled;
+        [JsonInclude]
+        public string alarmName;
+        [JsonInclude]
+        public bool tts;
 
         private void Replace(Config c)
         {
@@ -69,6 +87,10 @@ namespace JHP.Api
             this.y = c.y;
             this.opacity = c.opacity;
             this.topMost= c.topMost;
+            this.alarmEnabled = c.alarmEnabled;
+            this.alarmName = c.alarmName;
+            this.volume = c.volume;
+            this.tts = c.tts;
         }
 
         public void Save()

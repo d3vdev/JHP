@@ -10,6 +10,12 @@
 
 # 사용법
 
+## HRESULT: 0x80070002 에러가 뜨는경우
+
+https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
+
+설치
+
 ## 영상플레이어
 
 ![1](https://github.com/d3vdev/JHP/assets/68425571/47de287b-0afa-4ced-868f-835bce40bb17)
@@ -31,6 +37,7 @@
 좌클릭의 경우에는 타이머를 시작/정지 하는 기능이 있으며 우클릭의 경우 알람이 필요한 버프를 선택할 수 있습니다.
 
 ### 타이머 설정
+
 ![제목 없음-6](https://github.com/d3vdev/JHP/assets/68425571/0bfd633a-4d72-4e2e-ba77-63be29a74447)
 
 알람이 필요한 것들을 체크하면 해당 주기마다 알람이 울립니다. 

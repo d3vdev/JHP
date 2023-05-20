@@ -32,6 +32,7 @@ namespace JHP
 
         private long[] nextTick = new long[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         private long[] tick = new long[8] { 7200000, 36000000, 1800000, 1200000, 900000, 600000, 100000, 55000 };
+        private long[] cnextTick = new long[3] { 0, 0, 0 };
         private string[] msg =
         {
             "재획비",
@@ -43,17 +44,14 @@ namespace JHP
             "회수",
             "파운틴",
         };
-        SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
 
-        private WaveOutEvent outputDevice = new WaveOutEvent();
-        private AudioFileReader? audioFile;
         private void Timer_Tick(object? sender, EventArgs e)
         {
             var now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
             bool ring = false;
             var chk = Config.Instance.alarmEnabled;
             List<string> msgs = new List<string>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < nextTick.Length; i++)
             {
                 if (chk[i] == true && now >= nextTick[i])
                 {
@@ -62,30 +60,26 @@ namespace JHP
                     msgs.Add(msg[i]);
                 }
             }
+            CustomAlarm[] ca = Config.Instance.customAlarms;
+            for (int i = 0; i < cnextTick.Length; i++)
+            {
+                if (ca[i].Enabled == true && now >= cnextTick[i])
+                {
+                    ring = true;
+                    cnextTick[i] = now + (ca[i].Tick*1000);
+                    msgs.Add(ca[i].Name);
+                }
+            }
 
 
             if (ring == true)
             {
                 if (Config.Instance.tts == true)
                 {
-                    Task.Run(() =>
-                    {
-                        
-                        speechSynthesizer.SetOutputToDefaultAudioDevice();
-                        speechSynthesizer.SelectVoice("Microsoft Heami Desktop"); // 한국어 지원은 Heami 만 가능, 없어도 됨, 있으면 오류 나는경우가 있는거 같음
-                        speechSynthesizer.Speak(msgs[0]);
-                    });
+                    Synth.Instance.TTS(msgs[0]);
                 } else
                 {
-                    outputDevice.Volume = Config.Instance.volume / 100.0f;
-                    if (audioFile == null)
-                    {
-                        audioFile = new AudioFileReader(Path.Combine("alarm", Config.Instance.alarmName));
-                        outputDevice.Stop();
-                        outputDevice.Init(audioFile);
-                    }
-                    audioFile.Position = 0;
-                    outputDevice.Play();
+                    Synth.Instance.Ring();
                 }
             }
 
@@ -248,6 +242,10 @@ namespace JHP
                         {
                             nextTick[i] = now + tick[i];
                         }
+                        for (int i = 0; i < Math.Min(3, Config.Instance.customAlarms.Length); i++)
+                        {
+                            cnextTick[i] = now + Config.Instance.customAlarms[i].Tick;
+                        }
                     }
                     alarmBtn.BackColor = newState ? Color.LimeGreen : Color.White;
                     timer.Enabled = newState;
@@ -308,6 +306,7 @@ namespace JHP
             gotoBtn.ContextMenuStrip.Show(gotoBtn, loc);
         }
 
+
         private void MenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Tag.GetType() == typeof(Site))
@@ -317,13 +316,8 @@ namespace JHP
                 ToolStripCommand cmd = (ToolStripCommand)e.ClickedItem.Tag;
                 if (cmd == ToolStripCommand.ADD_SITE)
                 {
-                    string[] result = Prompt.ShowDialog("사이트 추가", "사이트 이름", "사이트 주소");
-
-                    if (result.Length == 2)
-                    {
-                        Config.Instance.sites.Add(new Api.Site(result[0], result[1]));
-                        UpdateMenu();
-                    }
+                    (new SiteForm()).ShowDialog();
+                    UpdateMenu();
                 } else if (cmd == ToolStripCommand.TOPMOST)
                 {
                     bool newState = !((ToolStripMenuItem)e.ClickedItem).Checked;
@@ -368,7 +362,6 @@ namespace JHP
             
             Opacity = e.NewValue / 100.0;
         }
-        private bool isAlarmShowing = false;
         private static int thickness = 10;
         private const int captionSize = 31;
         private readonly ReSize resize = new ReSize(thickness);

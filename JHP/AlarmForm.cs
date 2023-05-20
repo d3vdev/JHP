@@ -19,10 +19,6 @@ namespace JHP
     {
         public AlarmForm()
         {
-            if (outputDevice == null)
-            {
-                outputDevice = new WaveOutEvent();
-            }
             InitializeComponent();
             h2.CheckedChanged += (s, __) => Config.Instance.alarmEnabled[0] = ((CheckBox)s!).Checked;
             h1.CheckedChanged += (s, __) => Config.Instance.alarmEnabled[1] = ((CheckBox)s!).Checked;
@@ -36,32 +32,37 @@ namespace JHP
 
             alarmList.SelectedValueChanged += (s, e) =>
             {
-                audioFile = null;
                 Config.Instance.alarmName = (string)((ComboBox)s!).SelectedItem;
+                Synth.Instance.ResetAudioFile();
             };
             volume.Scroll += (s, t) =>
             {
-                Config.Instance.volume = t.NewValue;
-                outputDevice.Volume = t.NewValue / 100.0f;
+                Synth.Instance.SetVolume(t.NewValue);
             };
+
+            ttsRate.Scroll += (_, t) =>
+            {
+                Synth.Instance.SetRate(t.NewValue);
+            };
+            
             alarmList.DrawItem += ComboBox1_DrawItem;
             playAlarm.Click += PlayAlarm_Click;
-            outputDevice.Volume = Config.Instance.volume / 100.0f;
+
+            ca1_enable.CheckedChanged += (s, __) => Config.Instance.customAlarms[0].Enabled = ((CheckBox)s!).Checked;
+            ca2_enable.CheckedChanged += (s, __) => Config.Instance.customAlarms[1].Enabled = ((CheckBox)s!).Checked;
+            ca3_enable.CheckedChanged += (s, __) => Config.Instance.customAlarms[2].Enabled = ((CheckBox)s!).Checked;
+            ca1_name.TextChanged += (s, __) => Config.Instance.customAlarms[0].Name = ((TextBox)s!).Text;
+            ca2_name.TextChanged += (s, __) => Config.Instance.customAlarms[1].Name = ((TextBox)s!).Text;
+            ca3_name.TextChanged += (s, __) => Config.Instance.customAlarms[2].Name = ((TextBox)s!).Text;
+            ca1_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[0].Tick = Convert.ToInt64(((NumericUpDown)s!).Value);
+            ca2_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[1].Tick = Convert.ToInt64(((NumericUpDown)s!).Value);
+            ca3_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[2].Tick = Convert.ToInt64(((NumericUpDown)s!).Value);
 
 
         }
-        private WaveOutEvent outputDevice;
-        private AudioFileReader? audioFile;
         private void PlayAlarm_Click(object? sender, EventArgs e)
         {
-            if (audioFile == null)
-            {
-                audioFile = new AudioFileReader(Path.Combine("alarm", (string)alarmList.SelectedItem));
-                outputDevice.Stop();
-                outputDevice.Init(audioFile);
-            }
-            audioFile.Position = 0;
-            outputDevice.Play();
+            Synth.Instance.Ring();
         }
 
         private void ComboBox1_DrawItem(object? sender, DrawItemEventArgs e)
@@ -101,8 +102,7 @@ namespace JHP
         {
             if (Visible == false)
             {
-                if (outputDevice != null)
-                outputDevice.Stop();
+                Synth.Instance.Stop();
             }
             h2.Checked = Config.Instance.alarmEnabled[0];
             h1.Checked = Config.Instance.alarmEnabled[1];
@@ -113,6 +113,20 @@ namespace JHP
             s100.Checked = Config.Instance.alarmEnabled[6];
             s55.Checked = Config.Instance.alarmEnabled[7];
             volume.Value = Config.Instance.volume;
+            ttsRate.Value = Config.Instance.rate;
+            tts.Checked = Config.Instance.tts;
+
+            ca1_enable.Checked = Config.Instance.customAlarms[0].Enabled;
+            ca2_enable.Checked = Config.Instance.customAlarms[1].Enabled;
+            ca3_enable.Checked = Config.Instance.customAlarms[2].Enabled;
+
+            ca1_name.Text = Config.Instance.customAlarms[0].Name;
+            ca2_name.Text = Config.Instance.customAlarms[1].Name;
+            ca3_name.Text = Config.Instance.customAlarms[2].Name;
+
+            ca1_tick.Value = Config.Instance.customAlarms[0].Tick;
+            ca2_tick.Value = Config.Instance.customAlarms[1].Tick;
+            ca3_tick.Value = Config.Instance.customAlarms[2].Tick;
 
             GetAlarmFiles();
 
@@ -137,14 +151,7 @@ namespace JHP
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Task.Run(() =>
-            {
-                SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
-                speechSynthesizer.SetOutputToDefaultAudioDevice();
-                speechSynthesizer.SelectVoice("Microsoft Heami Desktop"); // 한국어 지원은 Heami 만 가능, 없어도 됨, 있으면 오류 나는경우가 있는거 같음
-                speechSynthesizer.Speak("재획비, 10분.");
-            });
-            
+            Synth.Instance.TTS("재획비 2시간");
         }
     }
 }

@@ -44,6 +44,21 @@ namespace JHP
             this.playAlarm = new System.Windows.Forms.Button();
             this.volume = new JHP.Controls.NSlider();
             this.button1 = new System.Windows.Forms.Button();
+            this.ca1_enable = new JHP.Controls.CustomCheckBox();
+            this.ca2_enable = new JHP.Controls.CustomCheckBox();
+            this.ca3_enable = new JHP.Controls.CustomCheckBox();
+            this.ca1_name = new System.Windows.Forms.TextBox();
+            this.ca2_name = new System.Windows.Forms.TextBox();
+            this.ca3_name = new System.Windows.Forms.TextBox();
+            this.ca1_tick = new System.Windows.Forms.NumericUpDown();
+            this.ca2_tick = new System.Windows.Forms.NumericUpDown();
+            this.ca3_tick = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ttsRate = new JHP.Controls.NSlider();
+            ((System.ComponentModel.ISupportInitialize)(this.ca1_tick)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ca2_tick)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ca3_tick)).BeginInit();
             this.SuspendLayout();
             // 
             // h2
@@ -138,7 +153,7 @@ namespace JHP
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(14, 323);
+            this.label1.Location = new System.Drawing.Point(14, 427);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 21);
             this.label1.TabIndex = 9;
@@ -152,7 +167,7 @@ namespace JHP
             this.alarmList.FormattingEnabled = true;
             this.alarmList.IntegralHeight = false;
             this.alarmList.ItemHeight = 23;
-            this.alarmList.Location = new System.Drawing.Point(14, 349);
+            this.alarmList.Location = new System.Drawing.Point(14, 453);
             this.alarmList.Name = "alarmList";
             this.alarmList.Size = new System.Drawing.Size(311, 29);
             this.alarmList.TabIndex = 10;
@@ -160,7 +175,7 @@ namespace JHP
             // tts
             // 
             this.tts.AutoSize = true;
-            this.tts.Location = new System.Drawing.Point(14, 430);
+            this.tts.Location = new System.Drawing.Point(14, 521);
             this.tts.Name = "tts";
             this.tts.Size = new System.Drawing.Size(290, 29);
             this.tts.TabIndex = 11;
@@ -170,7 +185,7 @@ namespace JHP
             // playAlarm
             // 
             this.playAlarm.Font = new System.Drawing.Font("Segoe MDL2 Assets", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.playAlarm.Location = new System.Drawing.Point(335, 349);
+            this.playAlarm.Location = new System.Drawing.Point(335, 453);
             this.playAlarm.Name = "playAlarm";
             this.playAlarm.Size = new System.Drawing.Size(31, 31);
             this.playAlarm.TabIndex = 12;
@@ -184,10 +199,10 @@ namespace JHP
             this.volume.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.volume.ForeColor = System.Drawing.Color.Black;
             this.volume.LargeChange = ((uint)(5u));
-            this.volume.Location = new System.Drawing.Point(14, 386);
+            this.volume.Location = new System.Drawing.Point(63, 490);
             this.volume.Name = "volume";
             this.volume.OverlayColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(157)))), ((int)(((byte)(204)))));
-            this.volume.Size = new System.Drawing.Size(350, 33);
+            this.volume.Size = new System.Drawing.Size(301, 25);
             this.volume.SmallChange = ((uint)(1u));
             this.volume.TabIndex = 13;
             this.volume.Text = "nSlider1";
@@ -197,20 +212,158 @@ namespace JHP
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(268, 430);
+            this.button1.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button1.Location = new System.Drawing.Point(268, 521);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(96, 29);
             this.button1.TabIndex = 14;
-            this.button1.Text = "TEST";
+            this.button1.Text = "TTS 샘플";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // ca1_enable
+            // 
+            this.ca1_enable.AutoSize = true;
+            this.ca1_enable.Location = new System.Drawing.Point(14, 311);
+            this.ca1_enable.Name = "ca1_enable";
+            this.ca1_enable.Size = new System.Drawing.Size(38, 29);
+            this.ca1_enable.TabIndex = 15;
+            this.ca1_enable.Text = " ";
+            this.ca1_enable.UseVisualStyleBackColor = true;
+            // 
+            // ca2_enable
+            // 
+            this.ca2_enable.AutoSize = true;
+            this.ca2_enable.Location = new System.Drawing.Point(14, 349);
+            this.ca2_enable.Name = "ca2_enable";
+            this.ca2_enable.Size = new System.Drawing.Size(38, 29);
+            this.ca2_enable.TabIndex = 16;
+            this.ca2_enable.Text = " ";
+            this.ca2_enable.UseVisualStyleBackColor = true;
+            // 
+            // ca3_enable
+            // 
+            this.ca3_enable.AutoSize = true;
+            this.ca3_enable.Location = new System.Drawing.Point(14, 387);
+            this.ca3_enable.Name = "ca3_enable";
+            this.ca3_enable.Size = new System.Drawing.Size(38, 29);
+            this.ca3_enable.TabIndex = 17;
+            this.ca3_enable.Text = " ";
+            this.ca3_enable.UseVisualStyleBackColor = true;
+            // 
+            // ca1_name
+            // 
+            this.ca1_name.Location = new System.Drawing.Point(45, 307);
+            this.ca1_name.Name = "ca1_name";
+            this.ca1_name.Size = new System.Drawing.Size(250, 32);
+            this.ca1_name.TabIndex = 18;
+            // 
+            // ca2_name
+            // 
+            this.ca2_name.Location = new System.Drawing.Point(45, 345);
+            this.ca2_name.Name = "ca2_name";
+            this.ca2_name.Size = new System.Drawing.Size(250, 32);
+            this.ca2_name.TabIndex = 20;
+            // 
+            // ca3_name
+            // 
+            this.ca3_name.Location = new System.Drawing.Point(45, 383);
+            this.ca3_name.Name = "ca3_name";
+            this.ca3_name.Size = new System.Drawing.Size(250, 32);
+            this.ca3_name.TabIndex = 22;
+            // 
+            // ca1_tick
+            // 
+            this.ca1_tick.Location = new System.Drawing.Point(301, 307);
+            this.ca1_tick.Maximum = new decimal(new int[] {
+            7200,
+            0,
+            0,
+            0});
+            this.ca1_tick.Name = "ca1_tick";
+            this.ca1_tick.Size = new System.Drawing.Size(63, 32);
+            this.ca1_tick.TabIndex = 23;
+            // 
+            // ca2_tick
+            // 
+            this.ca2_tick.Location = new System.Drawing.Point(301, 345);
+            this.ca2_tick.Maximum = new decimal(new int[] {
+            7200,
+            0,
+            0,
+            0});
+            this.ca2_tick.Name = "ca2_tick";
+            this.ca2_tick.Size = new System.Drawing.Size(63, 32);
+            this.ca2_tick.TabIndex = 24;
+            // 
+            // ca3_tick
+            // 
+            this.ca3_tick.Location = new System.Drawing.Point(301, 383);
+            this.ca3_tick.Maximum = new decimal(new int[] {
+            7200,
+            0,
+            0,
+            0});
+            this.ca3_tick.Name = "ca3_tick";
+            this.ca3_tick.Size = new System.Drawing.Size(63, 32);
+            this.ca3_tick.TabIndex = 25;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 490);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(50, 25);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "볼륨";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(14, 553);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 25);
+            this.label3.TabIndex = 27;
+            this.label3.Text = "TTS 속도";
+            // 
+            // ttsRate
+            // 
+            this.ttsRate.BackColor = System.Drawing.Color.White;
+            this.ttsRate.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.ttsRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ttsRate.ForeColor = System.Drawing.Color.Black;
+            this.ttsRate.LargeChange = ((uint)(5u));
+            this.ttsRate.Location = new System.Drawing.Point(125, 553);
+            this.ttsRate.Maximum = 10;
+            this.ttsRate.Minimum = -10;
+            this.ttsRate.Name = "ttsRate";
+            this.ttsRate.OverlayColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(157)))), ((int)(((byte)(204)))));
+            this.ttsRate.Size = new System.Drawing.Size(239, 25);
+            this.ttsRate.SmallChange = ((uint)(1u));
+            this.ttsRate.TabIndex = 28;
+            this.ttsRate.Text = "nSlider1";
+            this.ttsRate.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.ttsRate.ThumbSize = new System.Drawing.Size(16, 16);
+            this.ttsRate.Value = 10;
             // 
             // AlarmForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(378, 471);
+            this.ClientSize = new System.Drawing.Size(378, 590);
+            this.Controls.Add(this.ttsRate);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.ca3_tick);
+            this.Controls.Add(this.ca2_tick);
+            this.Controls.Add(this.ca1_tick);
+            this.Controls.Add(this.ca3_name);
+            this.Controls.Add(this.ca2_name);
+            this.Controls.Add(this.ca1_name);
+            this.Controls.Add(this.ca3_enable);
+            this.Controls.Add(this.ca2_enable);
+            this.Controls.Add(this.ca1_enable);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.volume);
             this.Controls.Add(this.playAlarm);
@@ -234,6 +387,9 @@ namespace JHP
             this.Text = "재획타이머";
             this.TopMost = true;
             this.VisibleChanged += new System.EventHandler(this.AlarmForm_VisibleChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.ca1_tick)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ca2_tick)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ca3_tick)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,5 +411,17 @@ namespace JHP
         private Button playAlarm;
         private NSlider volume;
         private Button button1;
+        private CustomCheckBox ca1_enable;
+        private CustomCheckBox ca2_enable;
+        private CustomCheckBox ca3_enable;
+        private TextBox ca1_name;
+        private TextBox ca2_name;
+        private TextBox ca3_name;
+        private NumericUpDown ca1_tick;
+        private NumericUpDown ca2_tick;
+        private NumericUpDown ca3_tick;
+        private Label label2;
+        private Label label3;
+        private NSlider ttsRate;
     }
 }

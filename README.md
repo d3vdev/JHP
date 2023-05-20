@@ -27,7 +27,7 @@ https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 사이트 이동을 누르게 되면 위와 같은 메뉴들이 나타나게 됩니다.
 기본적으로 많이 사용하는 사이트들은 추가해 놓았으며 사이트 추가 기능을 이용하면 다른 사이트들도 이용 가능합니다
 
-![gdgdg](https://github.com/d3vdev/JHP/assets/68425571/2694b451-68a3-4c74-975d-3107da40aba7)
+![gdgdg](https://github.com/d3vdev/JHP/assets/68425571/c5bc6c98-0c7f-4e0c-8416-36df86663dd9)
 
 사이트 추가를 누르면 이름과 URL 을 입력 할 수 있습니다.
 

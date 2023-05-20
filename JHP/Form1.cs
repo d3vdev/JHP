@@ -254,6 +254,7 @@ namespace JHP
                 case MouseButtons.Right:
                     if (alarmForm.Visible == false)
                     {
+                        alarmForm.Location = new Point(Location.X + Width, Location.Y);
                         alarmForm.Show();
                     }
                     else

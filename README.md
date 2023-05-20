@@ -27,7 +27,7 @@ https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 사이트 이동을 누르게 되면 위와 같은 메뉴들이 나타나게 됩니다.
 기본적으로 많이 사용하는 사이트들은 추가해 놓았으며 사이트 추가 기능을 이용하면 다른 사이트들도 이용 가능합니다
 
-![2 5](https://github.com/d3vdev/JHP/assets/68425571/5528655c-48b8-4faa-bcd1-5928227e9182)
+![gdgdg](https://github.com/d3vdev/JHP/assets/68425571/2694b451-68a3-4c74-975d-3107da40aba7)
 
 사이트 추가를 누르면 이름과 URL 을 입력 할 수 있습니다.
 
@@ -38,7 +38,7 @@ https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
 
 ### 타이머 설정
 
-![제목 없음-6](https://github.com/d3vdev/JHP/assets/68425571/0bfd633a-4d72-4e2e-ba77-63be29a74447)
+![asdasd](https://github.com/d3vdev/JHP/assets/68425571/716174dc-3719-47de-a28f-26eac429ce2d)
 
 알람이 필요한 것들을 체크하면 해당 주기마다 알람이 울립니다. 
 우선 기본적인 알람음은 포함되어 있으며 필요한 경우 alarm 폴더에 넣어주시고 재시작하면 목록에 나타나니 선택해서 사용하시면 됩니다.

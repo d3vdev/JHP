@@ -23,7 +23,8 @@ namespace JHP
                 Location = new Point(Config.Instance.x, Config.Instance.y),
                 Opacity = Config.Instance.opacity / 100.0,
                 FormBorderStyle = FormBorderStyle.None,
-                TopMost = Config.Instance.topMost
+                TopMost = Config.Instance.topMost,
+                WindowState = (Config.Instance.isMaximize ? FormWindowState.Maximized : FormWindowState.Normal)
             };
             
             Application.Run(frm1);

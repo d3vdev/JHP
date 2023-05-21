@@ -25,12 +25,14 @@ namespace JHP.Api
                 new CustomAlarm(false, "", 0),
             };
             rate = 0;
+            isMaximize = false;
         }
 
         [JsonConstructor]
         public Config(int width, int height, int x, int y, int opacity, bool topMost, 
             bool[] alarmEnabled, string alarmName, int volume, bool tts, 
-            List<Site> sites, CustomAlarm[] customAlarms, int rate, bool isHideWindowBorderOnFocusOut)
+            List<Site> sites, CustomAlarm[] customAlarms, int rate, bool isHideWindowBorderOnFocusOut,
+            bool isMaximize)
         {
             if (customAlarms == null)
             {
@@ -55,6 +57,7 @@ namespace JHP.Api
             this.tts =tts;
             this.customAlarms = customAlarms;
             this.rate = rate;
+            this.isMaximize = isMaximize;
         }
 
         private static readonly Lazy<Config> instance = new Lazy<Config>(() => new Config());
@@ -78,6 +81,8 @@ namespace JHP.Api
         public int volume;
         [JsonInclude]
         public int rate;
+        [JsonInclude]
+        public bool isMaximize;
 
         public List<Site> defaultSite = new List<Site>
         {
@@ -124,6 +129,7 @@ namespace JHP.Api
             this.sites = c.sites;
             this.customAlarms = c.customAlarms;
             this.rate = c.rate;
+            this.isMaximize = c.isMaximize;
         }
 
         public void Save()

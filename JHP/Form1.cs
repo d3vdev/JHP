@@ -524,6 +524,7 @@ namespace JHP
 
             Config.Instance.width = this.ClientSize.Width;
             Config.Instance.height = this.ClientSize.Height;
+            Config.Instance.isMaximize = (WindowState == FormWindowState.Maximized);
             Config.Instance.Save();
         }
 

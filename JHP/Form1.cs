@@ -305,7 +305,14 @@ namespace JHP
                 Tag = ToolStripCommand.ADD_SITE
             });
             menuStrip.ItemClicked += MenuStrip_ItemClicked;
+            menuStrip.Closing += MenuStrip_Closing;
             gotoBtn.ContextMenuStrip = menuStrip;
+        }
+
+        private void MenuStrip_Closing(object? sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked && cancelClosing == true) 
+                e.Cancel = true;
         }
 
         private void GotoBtn_Click(object? sender, EventArgs e)
@@ -314,11 +321,20 @@ namespace JHP
             gotoBtn.ContextMenuStrip.Show(gotoBtn, loc);
         }
 
-
+        bool cancelClosing = false;
         private void MenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
+            cancelClosing = false;
+            if (e.ClickedItem.GetType() == typeof(ToolStripSeparator))
+            {
+                cancelClosing = true;
+                return;
+            }
+                
+
             if (e.ClickedItem.Tag.GetType() == typeof(Site))
                 wv.Source = new Uri(((Site)e.ClickedItem.Tag).Url);
+
             else if (e.ClickedItem.Tag.GetType() == typeof(ToolStripCommand))
             {
                 ToolStripCommand cmd = (ToolStripCommand)e.ClickedItem.Tag;
@@ -332,9 +348,12 @@ namespace JHP
                     ((ToolStripMenuItem)e.ClickedItem).Checked = newState;
                     Config.Instance.topMost = newState;
                     this.TopMost = newState;
-                }else if (cmd == ToolStripCommand.TOGGLE_HIDE_WINDOW_BORDER) {
+                    cancelClosing = true;
+                }
+                else if (cmd == ToolStripCommand.TOGGLE_HIDE_WINDOW_BORDER) {
                     Config.Instance.isHideWindowBorderOnFocusOut = !Config.Instance.isHideWindowBorderOnFocusOut;
                     ((ToolStripMenuItem)e.ClickedItem).Checked = Config.Instance.isHideWindowBorderOnFocusOut;
+                    cancelClosing = true;
                 }
             }
 

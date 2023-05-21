@@ -104,10 +104,15 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.addButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SiteForm";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "사이트 관리";
+            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 

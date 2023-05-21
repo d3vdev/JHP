@@ -13,6 +13,7 @@ namespace JHP.Api
             opacity = 100;
             sites = new List<Site>();
             topMost = false;
+            isHideWindowBorderOnFocusOut = false;
             alarmEnabled = new bool[] { false, false, false, false, false, false, false, false };
             alarmName = "";
             volume = 70;
@@ -27,7 +28,9 @@ namespace JHP.Api
         }
 
         [JsonConstructor]
-        public Config(int width, int height, int x, int y, int opacity, bool topMost, bool[] alarmEnabled, string alarmName, int volume, bool tts, List<Site> sites, CustomAlarm[] customAlarms, int rate)
+        public Config(int width, int height, int x, int y, int opacity, bool topMost, 
+            bool[] alarmEnabled, string alarmName, int volume, bool tts, 
+            List<Site> sites, CustomAlarm[] customAlarms, int rate, bool isHideWindowBorderOnFocusOut)
         {
             if (customAlarms == null)
             {
@@ -45,6 +48,7 @@ namespace JHP.Api
             this.opacity = opacity;
             this.sites = sites;
             this.topMost = topMost;
+            this.isHideWindowBorderOnFocusOut = isHideWindowBorderOnFocusOut;
             this.alarmEnabled = alarmEnabled;
             this.alarmName = alarmName;
             this.volume = volume;
@@ -91,6 +95,9 @@ namespace JHP.Api
         [JsonInclude]
         public bool topMost;
 
+        [JsonInclude] 
+        public bool isHideWindowBorderOnFocusOut;
+
         [JsonInclude]
         public bool[] alarmEnabled;
         [JsonInclude]
@@ -109,6 +116,7 @@ namespace JHP.Api
             this.y = c.y;
             this.opacity = c.opacity;
             this.topMost= c.topMost;
+            this.isHideWindowBorderOnFocusOut = c.isHideWindowBorderOnFocusOut;
             this.alarmEnabled = c.alarmEnabled;
             this.alarmName = c.alarmName;
             this.volume = c.volume;

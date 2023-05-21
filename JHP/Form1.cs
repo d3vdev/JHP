@@ -33,16 +33,17 @@ namespace JHP
         private long[] nextTick = new long[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
         private long[] tick = new long[8] { 7200000, 36000000, 1800000, 1200000, 900000, 600000, 100000, 55000 };
         private long[] cnextTick = new long[3] { 0, 0, 0 };
+        private bool isWindowBorderHided = false;
         private string[] msg =
         {
-            "ÀçÈ¹ºñ",
-            "60ºÐ",
-            "30ºÐ",
-            "20ºÐ",
-            "15ºÐ",
-            "10ºÐ",
-            "È¸¼ö",
-            "ÆÄ¿îÆ¾",
+            "ï¿½ï¿½È¹ï¿½ï¿½",
+            "60ï¿½ï¿½",
+            "30ï¿½ï¿½",
+            "20ï¿½ï¿½",
+            "15ï¿½ï¿½",
+            "10ï¿½ï¿½",
+            "È¸ï¿½ï¿½",
+            "ï¿½Ä¿ï¿½Æ¾",
         };
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -275,9 +276,15 @@ namespace JHP
             menuStrip = new ContextMenuStrip();
             menuStrip.Items.Add(new ToolStripMenuItem()
             {
-                Text = "Ç×»ó À§¿¡ Ç¥½Ã",
+                Text = "ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½",
                 Tag = ToolStripCommand.TOPMOST,
                 Checked = Config.Instance.topMost
+            });
+            menuStrip.Items.Add(new ToolStripMenuItem()
+            {
+                Text = "toggle hide window border on focus out",
+                Tag = ToolStripCommand.TOGGLE_HIDE_WINDOW_BORDER,
+                Checked = Config.Instance.isHideWindowBorderOnFocusOut
             });
             menuStrip.Items.Add(new ToolStripSeparator());
             menuStrip.Items.AddRange(Config.Instance.defaultSite.Select(s => new ToolStripMenuItem()
@@ -294,7 +301,7 @@ namespace JHP
             menuStrip.Items.Add(new ToolStripSeparator());
             menuStrip.Items.Add(new ToolStripMenuItem()
             {
-                Text = "»çÀÌÆ® Ãß°¡",
+                Text = "ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½",
                 Tag = ToolStripCommand.ADD_SITE
             });
             menuStrip.ItemClicked += MenuStrip_ItemClicked;
@@ -325,8 +332,10 @@ namespace JHP
                     ((ToolStripMenuItem)e.ClickedItem).Checked = newState;
                     Config.Instance.topMost = newState;
                     this.TopMost = newState;
+                }else if (cmd == ToolStripCommand.TOGGLE_HIDE_WINDOW_BORDER) {
+                    Config.Instance.isHideWindowBorderOnFocusOut = !Config.Instance.isHideWindowBorderOnFocusOut;
+                    ((ToolStripMenuItem)e.ClickedItem).Checked = Config.Instance.isHideWindowBorderOnFocusOut;
                 }
-                
             }
 
         }
@@ -411,13 +420,16 @@ namespace JHP
         {
             alarmForm.Location = new Point(Location.X + Width, Location.Y);
 
-           base.OnMove(e);
+            base.OnMove(e);
         }
 
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            DrawForm(e.Graphics);
+            if(!isWindowBorderHided)
+            {
+                DrawForm(e.Graphics);
+            }
             base.OnPaint(e);
         }
 
@@ -436,7 +448,32 @@ namespace JHP
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == 0x84)
+            if (m.Msg == 0x1c && m.WParam.ToInt32()==0x0) 
+            {
+                if (Config.Instance.isHideWindowBorderOnFocusOut) 
+                {
+                    foreach (Control control in Controls) 
+                    {
+                        if (control.GetType() == typeof(WebView2)) continue;
+                        control.Hide();
+                    }
+                    isWindowBorderHided = true;
+                    Refresh();
+                } 
+            } else if (m.Msg == 0x1c && m.WParam.ToInt32()==0x1) 
+            {
+                if (Config.Instance.isHideWindowBorderOnFocusOut) 
+                {
+                    foreach (Control control in Controls) 
+                    {
+                        if (control.GetType() == typeof(WebView2)) continue;
+                        control.Show();
+                    }
+                    isWindowBorderHided = false;
+                    Refresh();
+                }
+            }
+            else if (m.Msg == 0x84)
             {  // Trap WM_NCHITTEST
                 Point pos = new Point(m.LParam.ToInt32());
                 pos = this.PointToClient(pos);

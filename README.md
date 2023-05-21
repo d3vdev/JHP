@@ -13,8 +13,16 @@
 ## HRESULT: 0x80070002 에러가 뜨는경우
 
 https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section
-
 설치
+
+## TTS관련 에러가 나는 경우
+TTS 기능
+https://www.microsoft.com/en-us/download/details.aspx?id=27225
+음성 팩
+http://download.microsoft.com/download/4/0/D/40D6347A-AFA5-417D-A9BB-173D937BEED4/MSSpeech_TTS_ko-KR_Heami.msi
+
+두가지를 설치하시면 해결됩니다 (해결되지 않을경우 문의 부탁드립니다)
+
 
 ## 영상플레이어
 

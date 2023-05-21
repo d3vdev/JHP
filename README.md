@@ -31,12 +31,12 @@ http://download.microsoft.com/download/4/0/D/40D6347A-AFA5-417D-A9BB-173D937BEED
 
 전반적인 UI 입니다.
 
-![2](https://github.com/d3vdev/JHP/assets/68425571/f173b15d-d769-437e-8f3f-695cf8b8702b)
+![adg](https://github.com/d3vdev/JHP/assets/68425571/b6fe0bd4-ac30-429f-9183-7db0a2cdab71)
 
 사이트 이동을 누르게 되면 위와 같은 메뉴들이 나타나게 됩니다.
 기본적으로 많이 사용하는 사이트들은 추가해 놓았으며 사이트 추가 기능을 이용하면 다른 사이트들도 이용 가능합니다
 
-![gdgdg](https://github.com/d3vdev/JHP/assets/68425571/c5bc6c98-0c7f-4e0c-8416-36df86663dd9)
+![adgg](https://github.com/d3vdev/JHP/assets/68425571/c2c4e264-1afd-43c2-a21e-18c37642c896)
 
 사이트 추가를 누르면 이름과 URL 을 입력 할 수 있습니다.
 

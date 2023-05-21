@@ -36,14 +36,14 @@ namespace JHP
         private bool isWindowBorderHided = false;
         private string[] msg =
         {
-            "��ȹ��",
-            "60��",
-            "30��",
-            "20��",
-            "15��",
-            "10��",
-            "ȸ��",
-            "�Ŀ�ƾ",
+            "재획비",
+            "60분",
+            "30분",
+            "20분",
+            "15분",
+            "10분",
+            "회수",
+            "파운틴",
         };
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -276,13 +276,13 @@ namespace JHP
             menuStrip = new ContextMenuStrip();
             menuStrip.Items.Add(new ToolStripMenuItem()
             {
-                Text = "�׻� ���� ǥ��",
+                Text = "항상 위에 표시",
                 Tag = ToolStripCommand.TOPMOST,
                 Checked = Config.Instance.topMost
             });
             menuStrip.Items.Add(new ToolStripMenuItem()
             {
-                Text = "toggle hide window border on focus out",
+                Text = "다른 창 선택 시 테두리 안보이기",
                 Tag = ToolStripCommand.TOGGLE_HIDE_WINDOW_BORDER,
                 Checked = Config.Instance.isHideWindowBorderOnFocusOut
             });
@@ -301,7 +301,7 @@ namespace JHP
             menuStrip.Items.Add(new ToolStripSeparator());
             menuStrip.Items.Add(new ToolStripMenuItem()
             {
-                Text = "����Ʈ �߰�",
+                Text = "사이트 추가",
                 Tag = ToolStripCommand.ADD_SITE
             });
             menuStrip.ItemClicked += MenuStrip_ItemClicked;

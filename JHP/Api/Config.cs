@@ -92,7 +92,8 @@ namespace JHP.Api
             new Site( "티빙", "https://www.tving.com/" ),
             new Site( "쿠팡플레이", "https://coupangplay.com/" ),
             new Site( "디즈니플러스", "https://www.disneyplus.com/" ),
-            new Site( "유튜브", "https://youtube.com" )
+            new Site( "유튜브", "https://youtube.com" ),
+            new Site( "트위치", "https://twitch.tv")
         };
         [JsonInclude]
         public List<Site> sites;

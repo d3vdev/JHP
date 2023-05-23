@@ -8,6 +8,9 @@ namespace JHP.Controls
 {
     public class ControlButton: Button
     {
+        public ControlButton() {
+            SetStyle(ControlStyles.Selectable, false);
+        } 
         protected override bool ShowFocusCues
         {
             get

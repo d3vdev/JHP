@@ -59,7 +59,7 @@ namespace JHP.Api
             this.customAlarms = customAlarms;
             this.rate = rate;
             this.isMaximize = isMaximize;
-            this.latestUrl = latestUrl;
+            this.latestUrl = latestUrl != null ? latestUrl : defaultSite[0].Url;
         }
 
         private static readonly Lazy<Config> instance = new Lazy<Config>(() => new Config());

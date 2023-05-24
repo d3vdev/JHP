@@ -104,7 +104,7 @@ namespace JHP
             var webView2Environment = await CoreWebView2Environment.CreateAsync(null, _cacheFolderPath);
             
             await wv.EnsureCoreWebView2Async(webView2Environment);
-            wv.CoreWebView2.Navigate("https://netflix.com");
+            wv.CoreWebView2.Navigate(Config.Instance.latestUrl);
         }
         void InitControls()
         {
@@ -333,7 +333,11 @@ namespace JHP
                 
 
             if (e.ClickedItem.Tag.GetType() == typeof(Site))
+            {
                 wv.Source = new Uri(((Site)e.ClickedItem.Tag).Url);
+                Config.Instance.latestUrl = ((Site)e.ClickedItem.Tag).Url;
+            }
+                
 
             else if (e.ClickedItem.Tag.GetType() == typeof(ToolStripCommand))
             {
@@ -538,11 +542,15 @@ namespace JHP
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Config.Instance.opacity = slider.Value;
-            Config.Instance.x = this.Location.X;
-            Config.Instance.y = this.Location.Y;
-
-            Config.Instance.width = this.ClientSize.Width;
-            Config.Instance.height = this.ClientSize.Height;
+            
+            if (WindowState != FormWindowState.Maximized)
+            {
+                Config.Instance.width = this.ClientSize.Width;
+                Config.Instance.height = this.ClientSize.Height;
+                Config.Instance.x = this.Location.X;
+                Config.Instance.y = this.Location.Y;
+            }
+            
             Config.Instance.isMaximize = (WindowState == FormWindowState.Maximized);
             Config.Instance.Save();
         }

@@ -473,7 +473,7 @@ namespace JHP
         {
             if (m.Msg == 0x1c && m.WParam.ToInt32()==0x0) 
             {
-                if (Config.Instance.isHideWindowBorderOnFocusOut) 
+                if (Config.Instance.isHideWindowBorderOnFocusOut && WindowState != FormWindowState.Maximized) 
                 {
                     foreach (Control control in Controls) 
                     {
@@ -485,7 +485,7 @@ namespace JHP
                 } 
             } else if (m.Msg == 0x1c && m.WParam.ToInt32()==0x1) 
             {
-                if (Config.Instance.isHideWindowBorderOnFocusOut) 
+                if (Config.Instance.isHideWindowBorderOnFocusOut && WindowState != FormWindowState.Maximized) 
                 {
                     foreach (Control control in Controls) 
                     {

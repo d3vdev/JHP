@@ -398,6 +398,8 @@ namespace JHP
         private static int thickness = 10;
         private const int captionSize = 31;
         private readonly ReSize resize = new ReSize(thickness);
+        private Size latestSize = new Size();
+        private Point latestPos = new Point();
 
         protected override void OnResize(EventArgs e)
         {
@@ -407,6 +409,12 @@ namespace JHP
             } else
             {
                 thickness = 10;
+            }
+
+            if (WindowState == FormWindowState.Normal)
+            {
+                latestSize.Width = Width;
+                latestSize.Height = Height;
             }
             
             if (wv != null)
@@ -442,6 +450,11 @@ namespace JHP
         protected override void OnMove(EventArgs e)
         {
             alarmForm.Location = new Point(Location.X + Width, Location.Y);
+            if (WindowState == FormWindowState.Normal)
+            {
+                latestPos.X = Location.X;
+                latestPos.Y = Location.Y;
+            }
 
             base.OnMove(e);
         }
@@ -542,15 +555,13 @@ namespace JHP
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Config.Instance.opacity = slider.Value;
-            
-            if (WindowState != FormWindowState.Maximized)
-            {
-                Config.Instance.width = this.ClientSize.Width;
-                Config.Instance.height = this.ClientSize.Height;
-                Config.Instance.x = this.Location.X;
-                Config.Instance.y = this.Location.Y;
-            }
-            
+
+            Config.Instance.x = latestPos.X;
+            Config.Instance.y = latestPos.Y;
+
+            Config.Instance.width = latestSize.Width;
+            Config.Instance.height = latestSize.Height;
+
             Config.Instance.isMaximize = (WindowState == FormWindowState.Maximized);
             Config.Instance.Save();
         }

@@ -2,9 +2,7 @@ using JHP.Api;
 using JHP.Controls;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
-using NAudio.Wave;
-using System.Speech.Synthesis;
-using Prompt = JHP.Api.Prompt;
+using System.Diagnostics;
 
 namespace JHP
 {
@@ -124,7 +122,6 @@ namespace JHP
                 BackColor = Color.White,
                 TabStop = false,
                 Anchor = AnchorStyles.Left | AnchorStyles.Top
-                
             };
             
             gotoBtn.Click += GotoBtn_Click;
@@ -144,7 +141,6 @@ namespace JHP
                 BackColor = Color.White,
                 TabStop = false,
                 Anchor = AnchorStyles.Left | AnchorStyles.Top
-
             };
 
             alarmBtn.MouseUp += AlarmBtn_Click;
@@ -550,6 +546,33 @@ namespace JHP
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            UpdateCheck();
+        }
+
+        private async void UpdateCheck()
+        {
+            var isUpdate = await UpdateChecker.Check();
+            if (isUpdate)
+            {
+                var btn = new ControlButton()
+                {
+                    Location = new Point((Width-120) / 2, 1),
+                    Size = new Size(120, btnSize),
+
+                    Text = "업데이트 버전 존재",
+                    FlatAppearance =
+                    {
+                        BorderSize = 0,
+                    },
+                    FlatStyle = FlatStyle.Flat,
+                    ForeColor = Color.White,
+                    BackColor = Color.FromArgb(unchecked((int)0xFFFF4938)),
+                    TabStop = false,
+                    Anchor = AnchorStyles.Left | AnchorStyles.Top
+                };
+                btn.Click += (_, _) => { Process.Start("explorer.exe", "https://github.com/d3vdev/JHP/releases/latest"); };
+                Controls.Add(btn);
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

@@ -5,7 +5,7 @@ namespace JHP.Api
 {
     public  class Config
     {
-        public static string Version = "2.2";
+        public static string Version = "2.3";
         private Config() {
             x = 30;
             y = 30;

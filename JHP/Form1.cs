@@ -22,7 +22,7 @@ namespace JHP
             InitWV();
             timer = new System.Windows.Forms.Timer()
             {
-                Interval = 1000,
+                Interval = 500,
                 Enabled = false,
             };
             timer.Tick += Timer_Tick;
@@ -65,7 +65,7 @@ namespace JHP
                 if (ca[i].Enabled == true && now >= cnextTick[i])
                 {
                     ring = true;
-                    cnextTick[i] = now + (ca[i].Tick*1000);
+                    cnextTick[i] = now + (ca[i].Tick);
                     msgs.Add(ca[i].Name);
                 }
             }

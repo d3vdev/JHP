@@ -38,13 +38,18 @@ namespace JHP
             volume.Scroll += (s, t) =>
             {
                 Synth.Instance.SetVolume(t.NewValue);
+                volumnInput.Value = t.NewValue;
+            };
+            volumnInput.ValueChanged += (s, __) =>
+            {
+                volume.Value = (int)((NumericUpDown)s!).Value;
             };
 
             ttsRate.Scroll += (_, t) =>
             {
                 Synth.Instance.SetRate(t.NewValue);
             };
-            
+
             alarmList.DrawItem += ComboBox1_DrawItem;
             playAlarm.Click += PlayAlarm_Click;
 
@@ -54,9 +59,9 @@ namespace JHP
             ca1_name.TextChanged += (s, __) => Config.Instance.customAlarms[0].Name = ((TextBox)s!).Text;
             ca2_name.TextChanged += (s, __) => Config.Instance.customAlarms[1].Name = ((TextBox)s!).Text;
             ca3_name.TextChanged += (s, __) => Config.Instance.customAlarms[2].Name = ((TextBox)s!).Text;
-            ca1_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[0].Tick = Convert.ToInt64(((NumericUpDown)s!).Value);
-            ca2_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[1].Tick = Convert.ToInt64(((NumericUpDown)s!).Value);
-            ca3_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[2].Tick = Convert.ToInt64(((NumericUpDown)s!).Value);
+            ca1_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[0].Tick = Convert.ToInt64(((NumericUpDown)s!).Value * 1000);
+            ca2_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[1].Tick = Convert.ToInt64(((NumericUpDown)s!).Value * 1000);
+            ca3_tick.ValueChanged += (s, __) => Config.Instance.customAlarms[2].Tick = Convert.ToInt64(((NumericUpDown)s!).Value * 1000);
 
 
         }
@@ -113,6 +118,7 @@ namespace JHP
             s100.Checked = Config.Instance.alarmEnabled[6];
             s55.Checked = Config.Instance.alarmEnabled[7];
             volume.Value = Config.Instance.volume;
+            volumnInput.Value = Config.Instance.volume;
             ttsRate.Value = Config.Instance.rate;
             tts.Checked = Config.Instance.tts;
 
@@ -124,9 +130,9 @@ namespace JHP
             ca2_name.Text = Config.Instance.customAlarms[1].Name;
             ca3_name.Text = Config.Instance.customAlarms[2].Name;
 
-            ca1_tick.Value = Config.Instance.customAlarms[0].Tick;
-            ca2_tick.Value = Config.Instance.customAlarms[1].Tick;
-            ca3_tick.Value = Config.Instance.customAlarms[2].Tick;
+            ca1_tick.Value = Config.Instance.customAlarms[0].Tick / 1000.0m;
+            ca2_tick.Value = Config.Instance.customAlarms[1].Tick / 1000.0m;
+            ca3_tick.Value = Config.Instance.customAlarms[2].Tick / 1000.0m;
 
             GetAlarmFiles();
 
@@ -136,17 +142,18 @@ namespace JHP
         {
             var alarms = Directory.GetFiles("./alarm").Select((s, i) => Path.GetFileName(s));
             var initIndex = 0;
-            alarmList.Items.AddRange(alarms.Select((s, i) => {
+            alarmList.Items.AddRange(alarms.Select((s, i) =>
+            {
                 var fn = Path.GetFileName(s);
                 if (fn == Config.Instance.alarmName)
                 {
                     initIndex = i;
                 }
                 return fn;
-                }).ToArray());
+            }).ToArray());
 
             alarmList.SelectedIndex = initIndex;
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)

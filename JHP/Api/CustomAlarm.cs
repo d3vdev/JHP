@@ -20,6 +20,8 @@ namespace JHP.Api
         {
             Enabled = enabled;
             Name = name;
+            if (tick < 1000)
+                tick *= 1000;
             Tick = tick;
         }
     }

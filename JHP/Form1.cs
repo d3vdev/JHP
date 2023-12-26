@@ -1,4 +1,5 @@
 using JHP.Api;
+using JHP.Asset;
 using JHP.Controls;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
@@ -100,10 +101,21 @@ namespace JHP
         {
             string _cacheFolderPath = System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, "\\cache");
             var webView2Environment = await CoreWebView2Environment.CreateAsync(null, _cacheFolderPath);
-            
             await wv.EnsureCoreWebView2Async(webView2Environment);
+            wv.CoreWebView2.DOMContentLoaded += InjectJS;
             wv.CoreWebView2.Navigate(Config.Instance.latestUrl);
         }
+
+        private void InjectJS(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
+        {
+            if (wv.Source.Host.Contains("laftel.net"))
+            {
+                Debug.WriteLine("라프텔");
+                wv.CoreWebView2.ExecuteScriptAsync(UserScripts.LaftelSkipNext);
+            }
+        }
+
+
         void InitControls()
         {
 

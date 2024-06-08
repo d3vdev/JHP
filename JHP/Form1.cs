@@ -113,6 +113,11 @@ namespace JHP
                 Debug.WriteLine("라프텔");
                 wv.CoreWebView2.ExecuteScriptAsync(UserScripts.LaftelSkipNext);
             }
+            else if (wv.Source.Host.Contains("netflix.com"))
+            {
+                Debug.WriteLine("넷플");
+                wv.CoreWebView2.ExecuteScriptAsync(UserScripts.NetflixSkipNext);
+            }
         }
 
 

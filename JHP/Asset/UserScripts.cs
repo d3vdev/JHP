@@ -14,7 +14,7 @@ namespace JHP.Asset
     const container = document.getElementById('root');
     const config = { childList: true, subtree: true };
     const observer = new MutationObserver((m, o) => {
-        const links = container.querySelectorAll('div.App > div > div > div > div > div > div > div > div > div > div > button');
+        const links = container.querySelectorAll('div > div > div > div > div > div > div > div > div > div > button');
         for (const link of links) {
             if (link.innerText.indexOf(""바로 재생"") !== -1) {
                 console.log('click');

@@ -24,16 +24,25 @@ namespace JHP.Asset
         }
     });
 
-    const origFunc = history.pushState;
-    history.pushState = function () {
-        const result = origFunc.apply(window.history, arguments);
-        window.dispatchEvent(new Event('pushstate'));
-        return result;
-    };
+    function init() {
+        if (window && window.next && window.next.router) {
+            const origFunc = window.next.router.push;
+            window.next.router.push = function () {
+                const result = origFunc.apply(window.next.router, arguments);
+                console.log(arguments)
+                checkNext(arguments[0])
+                return result;
+            };
+        }   else {
+            setTimeout(init, 100);
+        }
+    }
+    
+    init()
 
     // 다음화 찾기 함수
-    const checkNext = () => {
-        if (window.location.pathname.indexOf('player') === 1) {
+    const checkNext = (path) => {
+        if (path.indexOf('player') === 1) {
             observer.observe(container, config);
             return;
         }
